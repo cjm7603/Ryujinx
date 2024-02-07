@@ -95,6 +95,17 @@ namespace Ryujinx.Ui.App.Common
             // Builds the applications list with paths to found applications
             List<string> applications = new();
 
+
+            //Building list of excluded directories
+            List<string> excludedDirectories = new();
+            foreach(string appdir in appDirs)
+            {
+                if (appdir.StartsWith("EXCLUDED\\"))
+                {
+                    excludedDirectories.Add(appdir.Remove(0, 9));
+                }
+            }
+
             try
             {
                 foreach (string appDir in appDirs)
@@ -111,17 +122,29 @@ namespace Ryujinx.Ui.App.Common
                         continue;
                     }
 
+                    if (appDir.StartsWith("EXCLUDED\\"))
+                    {
+                        continue;
+                    }
+
                     try
                     {
                         IEnumerable<string> files = Directory.EnumerateFiles(appDir, "*", SearchOption.AllDirectories).Where(file =>
                         {
-                            return
-                            (Path.GetExtension(file).ToLower() is ".nsp" && ConfigurationState.Instance.Ui.ShownFileTypes.NSP.Value) ||
-                            (Path.GetExtension(file).ToLower() is ".pfs0" && ConfigurationState.Instance.Ui.ShownFileTypes.PFS0.Value) ||
-                            (Path.GetExtension(file).ToLower() is ".xci" && ConfigurationState.Instance.Ui.ShownFileTypes.XCI.Value) ||
-                            (Path.GetExtension(file).ToLower() is ".nca" && ConfigurationState.Instance.Ui.ShownFileTypes.NCA.Value) ||
-                            (Path.GetExtension(file).ToLower() is ".nro" && ConfigurationState.Instance.Ui.ShownFileTypes.NRO.Value) ||
-                            (Path.GetExtension(file).ToLower() is ".nso" && ConfigurationState.Instance.Ui.ShownFileTypes.NSO.Value);
+                            if(!excludedDirectories.Contains(Path.GetDirectoryName(file)))
+                            {
+                                return
+                                (Path.GetExtension(file).ToLower() is ".nsp" && ConfigurationState.Instance.Ui.ShownFileTypes.NSP.Value) ||
+                                (Path.GetExtension(file).ToLower() is ".pfs0" && ConfigurationState.Instance.Ui.ShownFileTypes.PFS0.Value) ||
+                                (Path.GetExtension(file).ToLower() is ".xci" && ConfigurationState.Instance.Ui.ShownFileTypes.XCI.Value) ||
+                                (Path.GetExtension(file).ToLower() is ".nca" && ConfigurationState.Instance.Ui.ShownFileTypes.NCA.Value) ||
+                                (Path.GetExtension(file).ToLower() is ".nro" && ConfigurationState.Instance.Ui.ShownFileTypes.NRO.Value) ||
+                                (Path.GetExtension(file).ToLower() is ".nso" && ConfigurationState.Instance.Ui.ShownFileTypes.NSO.Value);
+                            }
+                            else
+                            {
+                                return false;
+                            }
                         });
 
                         foreach (string app in files)

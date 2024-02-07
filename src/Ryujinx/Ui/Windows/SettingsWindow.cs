@@ -790,7 +790,18 @@ namespace Ryujinx.Ui.Windows
 
             if (selection.GetSelected(out TreeIter treeIter))
             {
-                _gameDirsBoxStore.Remove(ref treeIter);
+                string path = (string)_gameDirsBoxStore.GetValue(treeIter, 0);
+
+                if (path.StartsWith("EXCLUDED\\"))
+                {
+                    path = path.Remove(0, 9);
+                }
+                else
+                {
+                    path = "EXCLUDED\\" + path;
+                }
+
+                _gameDirsBoxStore.SetValue(treeIter, 0, path);
 
                 _directoryChanged = true;
             }

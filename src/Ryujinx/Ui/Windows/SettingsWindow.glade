@@ -378,12 +378,12 @@
                                     </child>
                                       <child>
                                           <object class="GtkToggleButton" id="_excludeDir">
-                                              <property name="label" translatable="yes">Exclude</property>
+                                              <property name="label" translatable="yes">Toggle Exclude</property>
                                               <property name="width-request">80</property>
                                               <property name="visible">True</property>
                                               <property name="can-focus">True</property>
                                               <property name="receives-default">True</property>
-                                              <property name="tooltip-text" translatable="yes">Exclude selected game directory</property>
+                                              <property name="tooltip-text" translatable="yes">Toggle Exclude on selected game directory</property>
                                               <property name="margin-left">5</property>
                                               <signal name="toggled" handler="ExcludeDir_Pressed" swapped="no"/>
                                           </object>
