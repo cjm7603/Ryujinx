@@ -784,6 +784,20 @@ namespace Ryujinx.Ui.Windows
             ((ToggleButton)sender).SetStateFlags(StateFlags.Normal, true);
         }
 
+        private void ExcludeDir_Pressed(object sender, EventArgs args)
+        {
+            TreeSelection selection = _gameDirsBox.Selection;
+
+            if (selection.GetSelected(out TreeIter treeIter))
+            {
+                _gameDirsBoxStore.Remove(ref treeIter);
+
+                _directoryChanged = true;
+            }
+
+            ((ToggleButton)sender).SetStateFlags(StateFlags.Normal, true);
+        }
+
         private void CustThemeToggle_Activated(object sender, EventArgs args)
         {
             _custThemePath.Sensitive = _custThemeToggle.Active;
